@@ -3,8 +3,10 @@ import './index.css';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Products from './components/Products';
-import Favorites from './components/Favorites';
+import FavoritesModal from './components/FavoritesModal';
 import CartModal from './components/CartModal';
+import LoginModal from './components/LoginModal';
+import RegisterModal from './components/RegisterModal';
 import Footer from './components/Footer';
 import WhatsAppWidget from './components/WhatsAppWidget';
 
@@ -12,6 +14,8 @@ function App() {
   const [cart, setCart] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
   const [favorites, setFavorites] = useState([]);
+  const [favoritesOpen, setFavoritesOpen] = useState(false);
+  const [authModal, setAuthModal] = useState(null);
 
   const addToCart = (product) => {
     setCart(prev => {
@@ -30,15 +34,9 @@ function App() {
   };
 
   const toggleFavorite = (id) => {
-    setFavorites(prev => {
-      const isAdding = !prev.includes(id);
-      if (isAdding) {
-        setTimeout(() => {
-          document.getElementById('favoritos')?.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-      }
-      return isAdding ? [...prev, id] : prev.filter(f => f !== id);
-    });
+    setFavorites(prev =>
+      prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id]
+    );
   };
 
   const cartCount = cart.reduce((sum, item) => sum + item.qty, 0);
@@ -54,17 +52,16 @@ function App() {
         cartCount={cartCount}
         onCartClick={() => setCartOpen(true)}
         onNavClick={handleNavClick}
+        onLoginClick={() => setAuthModal('login')}
+        onRegisterClick={() => setAuthModal('register')}
+        favoritesCount={favorites.length}
+        onFavoritesClick={() => setFavoritesOpen(true)}
       />
       <main style={{ flex: 1 }}>
         <Hero />
         <Products
           onAddToCart={addToCart}
           favorites={favorites}
-          onToggleFavorite={toggleFavorite}
-        />
-        <Favorites
-          favorites={favorites}
-          onAddToCart={addToCart}
           onToggleFavorite={toggleFavorite}
         />
       </main>
@@ -75,6 +72,26 @@ function App() {
           cart={cart}
           onClose={() => setCartOpen(false)}
           onRemove={removeFromCart}
+        />
+      )}
+      {favoritesOpen && (
+        <FavoritesModal
+          favorites={favorites}
+          onClose={() => setFavoritesOpen(false)}
+          onAddToCart={addToCart}
+          onToggleFavorite={toggleFavorite}
+        />
+      )}
+      {authModal === 'login' && (
+        <LoginModal
+          onClose={() => setAuthModal(null)}
+          onSwitchToRegister={() => setAuthModal('register')}
+        />
+      )}
+      {authModal === 'register' && (
+        <RegisterModal
+          onClose={() => setAuthModal(null)}
+          onSwitchToLogin={() => setAuthModal('login')}
         />
       )}
     </div>

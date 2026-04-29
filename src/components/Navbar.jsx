@@ -1,8 +1,13 @@
 import { useState } from 'react';
 import { PawPrint, ShoppingCart } from 'lucide-react';
 
-export default function Navbar({ cartCount, onCartClick, onNavClick }) {
+export default function Navbar({ cartCount, onCartClick, onNavClick, onLoginClick, onRegisterClick, favoritesCount, onFavoritesClick }) {
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const handleMobileLink = (section) => {
+    onNavClick(section);
+    setMenuOpen(false);
+  };
 
   return (
     <nav style={{
@@ -21,17 +26,20 @@ export default function Navbar({ cartCount, onCartClick, onNavClick }) {
         justifyContent: 'space-between',
         height: '64px',
       }}>
-        {/* Left links — oculto no mobile */}
+        {/* Left links — desktop only */}
         <div className="nav-desktop-links" style={{ display: 'flex', gap: '28px', alignItems: 'center' }}>
           <a className="nav-link" href="#produtos" onClick={() => onNavClick('produtos')}>Produtos</a>
           <a className="nav-link" href="#contato" onClick={() => onNavClick('contato')}>Contato</a>
-          <a className="nav-link" href="#favoritos" onClick={() => onNavClick('favoritos')}>Favoritos</a>
+          <button className="nav-link nav-fav-btn" onClick={onFavoritesClick}>
+            Favoritos
+            {favoritesCount > 0 && <span className="nav-fav-badge">{favoritesCount}</span>}
+          </button>
         </div>
 
-        {/* Logo — centralizado no desktop, à esquerda no mobile */}
+        {/* Logo — centered */}
         <div
           className="nav-logo-wrap"
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          onClick={() => { window.scrollTo({ top: 0, behavior: 'smooth' }); setMenuOpen(false); }}
           style={{
             position: 'absolute',
             left: '50%',
@@ -51,7 +59,7 @@ export default function Navbar({ cartCount, onCartClick, onNavClick }) {
           }}>Paraíso Pet</span>
         </div>
 
-        {/* Right actions — oculto no mobile */}
+        {/* Right actions — desktop only */}
         <div className="nav-desktop-actions" style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
           <button onClick={onCartClick} style={{
             background: 'none',
@@ -93,6 +101,7 @@ export default function Navbar({ cartCount, onCartClick, onNavClick }) {
             fontFamily: 'Nunito, sans-serif',
             transition: 'all 0.2s',
           }}
+          onClick={onLoginClick}
           onMouseEnter={e => { e.target.style.background = '#0d6e6e'; e.target.style.color = 'white'; }}
           onMouseLeave={e => { e.target.style.background = 'none'; e.target.style.color = '#0d6e6e'; }}
           >Entrar</button>
@@ -108,9 +117,40 @@ export default function Navbar({ cartCount, onCartClick, onNavClick }) {
             fontFamily: 'Nunito, sans-serif',
             transition: 'all 0.2s',
           }}
+          onClick={onRegisterClick}
           onMouseEnter={e => e.target.style.background = '#0a5454'}
           onMouseLeave={e => e.target.style.background = '#0d6e6e'}
           >Cadastrar</button>
+        </div>
+
+        {/* Hamburguer — mobile only */}
+        <button
+          className={`nav-hamburger${menuOpen ? ' ham-open' : ''}`}
+          onClick={() => setMenuOpen(o => !o)}
+          aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
+        >
+          <span className="ham-line" />
+          <span className="ham-line" />
+          <span className="ham-line" />
+        </button>
+      </div>
+
+      {/* Mobile dropdown */}
+      <div className={`nav-mobile-menu${menuOpen ? ' nav-mobile-open' : ''}`}>
+        <a className="nav-mobile-link" href="#produtos" onClick={() => handleMobileLink('produtos')}>Produtos</a>
+        <button className="nav-mobile-link nav-mobile-fav" onClick={() => { onFavoritesClick(); setMenuOpen(false); }}>
+          Favoritos
+          {favoritesCount > 0 && <span className="nav-mobile-fav-badge">{favoritesCount}</span>}
+        </button>
+        <a className="nav-mobile-link" href="#contato" onClick={() => handleMobileLink('contato')}>Contato</a>
+        <button className="nav-mobile-cart" onClick={() => { onCartClick(); setMenuOpen(false); }}>
+          <ShoppingCart size={16} />
+          Carrinho
+          {cartCount > 0 && <span className="nav-mobile-cart-badge">{cartCount}</span>}
+        </button>
+        <div className="nav-mobile-auth">
+          <button className="nav-mobile-btn-outline" onClick={() => { onLoginClick(); setMenuOpen(false); }}>Entrar</button>
+          <button className="nav-mobile-btn-filled" onClick={() => { onRegisterClick(); setMenuOpen(false); }}>Cadastrar</button>
         </div>
       </div>
     </nav>
