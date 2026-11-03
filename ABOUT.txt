@@ -1,0 +1,1 @@
+Frontend responsivo de loja pet com React, Vite e Tailwind CSS. Catálogo para cães, gatos e peixes, filtros por categoria, carrinho e favoritos em memória, além de interfaces de login e cadastro. Protótipo com dados estáticos, sem backend ou pagamentos integrados.
