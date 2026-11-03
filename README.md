@@ -76,9 +76,3 @@ Parte das imagens utiliza o Unsplash e a fonte Nunito é carregada pelo Google F
 A execução atual não exige arquivo `.env`, chaves de API ou credenciais. Este README não inclui dados pessoais, contatos reais ou informações de acesso.
 
 Use dados fictícios ao demonstrar os formulários. Em futuras integrações, mantenha segredos no backend e fora do controle de versão; variáveis expostas pelo frontend, inclusive as prefixadas com `VITE_`, são públicas no build.
-
-## About do repositório
-
-Texto para o campo **Description** da seção **About** no GitHub, também disponível em [ABOUT.txt](ABOUT.txt):
-
-> Frontend responsivo de loja pet com React, Vite e Tailwind CSS. Catálogo para cães, gatos e peixes, filtros por categoria, carrinho e favoritos em memória, além de interfaces de login e cadastro. Protótipo com dados estáticos, sem backend ou pagamentos integrados.
